@@ -13,6 +13,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProductList from "./components/ProductList.jsx";
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -52,7 +53,7 @@ function App() {
             }
           />
           <Route path="/add_product" element={<AddProduct />} />
-          <Route path="/product" element={<Product  />} />
+          <Route path="/product" element={<ProductList  />} />
           <Route path="product/:id" element={<Product  />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/update/:id" element={<UpdateProduct />} />
