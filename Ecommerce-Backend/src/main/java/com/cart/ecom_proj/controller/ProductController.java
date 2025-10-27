@@ -1,6 +1,7 @@
 package com.cart.ecom_proj.controller;
 
 import com.cart.ecom_proj.model.Product;
+import com.cart.ecom_proj.repo.ProductRepo;
 import com.cart.ecom_proj.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ public class ProductController {
 
     @Autowired
     private ProductService service;
+    @Autowired
+    private ProductRepo productRepo;
 
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getAllProducts(){
@@ -62,21 +65,20 @@ public class ProductController {
 //    }
 
     @PutMapping("/product/{id}")
-    public ResponseEntity<String> updateProduct(@PathVariable int id,
-                                                @RequestPart Product product,
-                                                @RequestPart MultipartFile imageFile){
+    public ResponseEntity<String> updateProduct(
+            @PathVariable int id,
+            @RequestPart("product") Product product,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
 
-        Product product1 = null;
         try {
-            product1 = service.updateProduct(id, product, imageFile);
+            Product updated = service.updateProduct(id, product, imageFile);
+            if (updated != null)
+                return ResponseEntity.ok("Updated");
+            else
+                return ResponseEntity.badRequest().body("Product not found");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating product");
         }
-        if (product1 != null)
-            return new ResponseEntity<>("Updated", HttpStatus.OK);
-        else
-            return new ResponseEntity<>("Failed to update", HttpStatus.BAD_REQUEST);
-
     }
 
     @DeleteMapping("/product/{id}")

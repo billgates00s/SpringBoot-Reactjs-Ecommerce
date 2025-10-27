@@ -32,10 +32,31 @@ public class ProductService {
     }
 
     public Product updateProduct(int id, Product product, MultipartFile imageFile) throws IOException {
-        product.setImageDate(imageFile.getBytes());
-        product.setImageName(imageFile.getOriginalFilename());
-        product.getImageType(imageFile.getContentType());
-        return repo.save(product);
+        // ✅ Lấy product cũ trong DB
+        Product existingProduct = repo.findById(id).orElse(null);
+        if (existingProduct == null) {
+            return null; // hoặc throw exception nếu muốn
+        }
+
+        // ✅ Cập nhật các field cần thiết
+        existingProduct.setName(product.getName());
+        existingProduct.setDescription(product.getDescription());
+        existingProduct.setBrand(product.getBrand());
+        existingProduct.setCategory(product.getCategory());
+        existingProduct.setPrice(product.getPrice());
+        existingProduct.setStockQuantity(product.getStockQuantity());
+        existingProduct.setProductAvailable(product.isProductAvailable());
+        existingProduct.setReleaseDate(product.getReleaseDate());
+
+        // ✅ Cập nhật hình ảnh nếu có upload mới
+        if (imageFile != null && !imageFile.isEmpty()) {
+            existingProduct.setImageName(imageFile.getOriginalFilename());
+            existingProduct.setImageType(imageFile.getContentType());
+            existingProduct.setImageDate(imageFile.getBytes());
+        }
+
+        // ✅ Lưu lại (JPA sẽ hiểu là UPDATE vì entity đã có ID trong DB)
+        return repo.save(existingProduct);
     }
 
     public void deleteProduct(int id) {
