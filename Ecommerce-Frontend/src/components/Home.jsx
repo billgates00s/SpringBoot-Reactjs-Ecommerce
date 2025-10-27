@@ -23,7 +23,7 @@ const Home = ({ selectedCategory }) => {
           data.map(async (product) => {
             try {
               const response = await axios.get(
-                `http://localhost:8080/api/product/${product.id}/image`,
+                `http://localhost:8082/api/product/${product.id}/image`,
                 { responseType: "blob" }
               );
               const imageUrl = URL.createObjectURL(response.data);
@@ -163,9 +163,10 @@ const Home = ({ selectedCategory }) => {
                         e.preventDefault();
                         addToCart(product);
                       }}
-                      disabled={!productAvailable}
+                     // disabled={!productAvailable}
                     >
                       {productAvailable ? "Add to Cart" : "Out of Stock"}
+
                     </button> 
                   </div>
                 </Link>

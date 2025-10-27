@@ -11,7 +11,8 @@ import UpdateProduct from "./components/UpdateProduct";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -30,6 +31,7 @@ function App() {
             ? { ...item, quantity: item.quantity + 1 }
             : item
         )
+
       );
     } else {
       setCart([...cart, { ...product, quantity: 1 }]);
@@ -55,6 +57,16 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/update/:id" element={<UpdateProduct />} />
         </Routes>
+          <ToastContainer position="top-right" autoClose={1500} hideProgressBar={false} />
+          {/*<ToastContainer*/}
+          {/*    position="top-center"*/}
+          {/*    autoClose={1500}*/}
+          {/*    hideProgressBar={false}*/}
+          {/*    newestOnTop*/}
+          {/*    closeOnClick*/}
+          {/*    pauseOnHover*/}
+          {/*    theme="colored"*/}
+          {/*/>*/}
       </BrowserRouter>
     </AppProvider>
   );
